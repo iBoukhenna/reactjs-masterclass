@@ -73,16 +73,17 @@ class Incrementer extends React.Component {
 
   constructor (props) {
     super(props)
-    this.state = {index: props.start}
-    this.timer = null
+    this.state = {index: props.start, timer: null}
+    this.toggle = this.toggle.bind(this)
+    this.reset = this.reset.bind(this)
   }
 
   componentDidMount () {
-    this.timer = window.setInterval(this.increment.bind(this), 1000)
+    this.play()
   }
 
   componentWillUnmount () {
-    window.clearInterval(this.timer)
+    window.clearInterval(this.state.timer)
   }
 
   increment () {
@@ -93,9 +94,39 @@ class Incrementer extends React.Component {
     })
   }
 
+  pause () {
+    window.clearInterval(this.state.timer)
+    this.setState({
+      timer: null
+    })
+  }
+
+  play () {
+    window.clearInterval(this.state.timer)
+    this.state.timer = window.setInterval(this.increment.bind(this), 1000)
+  }
+
+  toggle () {
+    return this.state.timer ? this.pause() : this.play()
+  }
+
+  label () {
+    return this.state.timer ? 'Pause' : 'Play'
+  }
+
+  reset () {
+    this.pause()
+    this.play()
+    this.setState(function(state, props) {
+      return {index : props.start}
+    })
+  }
+
   render () {
     return <div>
-      index : {this.state.index}
+      index : {this.state.index} 
+      <button onClick={this.toggle}>{this.label()}</button>
+      <button onClick={this.reset}>Reset</button>
     </div>
   }
 
@@ -104,6 +135,28 @@ class Incrementer extends React.Component {
 Incrementer.defaultProps = {
   step : 1,
   start : 0
+}
+
+class ManualIncrementer extends React.Component {
+
+  constructor (props) {
+    super(props)
+    this.state = {index: 0}
+  }
+
+  increment (e) {
+    // pour empécher l'event par defaut comme dans le cas balise a il ne redirige vers le lien
+    e.preventDefault()
+    this.setState((state, props) => ({index : state.index + 1}))
+  }
+
+  render () {
+    return <div>
+      index : {this.state.index}
+      <button onClick={this.increment.bind(this)}>Increment</button>
+    </div>
+  }
+
 }
 
 
