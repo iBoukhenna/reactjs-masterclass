@@ -96,7 +96,7 @@ class ManualIncrementer extends React.Component {
 
     render () {
         return <div>
-            Manual Counter : {this.state.mcount}<a onClick={this.increment.bind(this)}>Increment</a>
+            Manual Counter : {this.state.mcount} <a herf="https://www.google.com" onClick={this.increment.bind(this)}>Increment</a>
         </div>
     }
 }
