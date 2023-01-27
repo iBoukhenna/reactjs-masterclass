@@ -68,7 +68,9 @@ class Incrementer extends React.Component {
     }
 
     increment () {
-        this.setState({count: this.state.count + 1})
+        this.setState(function (state, props) {
+            return {count: state.count + 1}
+        })
     }
 
     render () {
