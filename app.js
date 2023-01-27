@@ -26,10 +26,15 @@ class Welcome extends React.Component {
 
 class Clock extends React.Component {
 
+    constructor (props) {
+        super(props)
+        // state is an object that will represent the useful data inside the component
+        this.state = {date : new Date()}
+    }
+
     render() {
-        const date = new Date()
         return <div>
-            It's {date.toLocaleDateString()} {date.toLocaleTimeString()}
+            It's {this.state.date.toLocaleDateString()} {this.state.date.toLocaleTimeString()}
         </div>
     }
 }
