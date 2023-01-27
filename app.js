@@ -24,10 +24,21 @@ class Welcome extends React.Component {
     }
 }
 
+class Clock extends React.Component {
+
+    render() {
+        const date = new Date()
+        return <div>
+            It's {date.toLocaleDateString()} {date.toLocaleTimeString()}
+        </div>
+    }
+}
+
 function Home() {
     return <div>
         <Welcome name="Amine" />
         <Welcome name="Ahmed" />
+        <Clock />
     </div>
 }
 
