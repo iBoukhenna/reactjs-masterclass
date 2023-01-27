@@ -24,4 +24,11 @@ class Welcome extends React.Component {
     }
 }
 
-root.render(<Welcome name="Amine">Hello World !</Welcome>)
+function Home() {
+    return <div>
+        <Welcome name="Amine" />
+        <Welcome name="Ahmed" />
+    </div>
+}
+
+root.render(<Home />)
