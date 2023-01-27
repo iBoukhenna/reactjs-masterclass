@@ -89,13 +89,14 @@ class ManualIncrementer extends React.Component {
         this.state = {mcount: 0}
     }
 
-    increment () {
+    increment (e) {
+        e.preventDefault()
         this.setState((state, props) => ({mcount: state.mcount + 1}))
     }
 
     render () {
         return <div>
-            Manual Counter : {this.state.mcount}<button onClick={this.increment.bind(this)}>Increment</button>
+            Manual Counter : {this.state.mcount}<a onClick={this.increment.bind(this)}>Increment</a>
         </div>
     }
 }
