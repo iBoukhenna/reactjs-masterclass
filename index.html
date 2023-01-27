@@ -8,7 +8,10 @@
     <!-- defer to load the file js at the end of parsing -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js" defer></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" defer></script>
-    <script src="app.js" defer></script>
+    <!-- https://babeljs.io/repl -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script src="app.js" defer type="text/babel"></script>
 </head>
 <body>
     <div id="app">

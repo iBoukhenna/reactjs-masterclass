@@ -4,10 +4,9 @@ let n = 0
 
 // react update only the span, not like innerHTML
 function render(root) {
-    const title = React.createElement('h1', {}
-        , 'Hello World ! '
-        , React.createElement('span', {}, n)
-    )
+    const title = <h1>
+        Hello World ! <span>{n}</span>
+    </h1>
 
     root.render(title)
 }
