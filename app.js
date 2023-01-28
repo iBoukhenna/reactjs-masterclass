@@ -41,6 +41,7 @@ function ProductTable ({products, inStockOnly, filterText}) {
             lastCategory = product.category
             rows.push(<ProductCategoryRow key={lastCategory} category={lastCategory} />)
         }
+        // don't use event like this onClick={() => this.demo = 1}
         rows.push(<ProductRow key={product.name} product={product} />)
     })
 
@@ -86,7 +87,7 @@ class SearchBar extends React.Component {
     }
 }
 
-class FilterableProductTable extends React.PureComponent {
+class FilterableProductTable extends React.Component {
 
     constructor (props) {
         super(props)
@@ -97,6 +98,12 @@ class FilterableProductTable extends React.PureComponent {
 
         this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
         this.handleInStockChange = this.handleInStockChange.bind(this)
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        return nextProps.products !== this.props.products
+        || nextState.filterText !== this.props.filterText
+        || nextState.inStockOnly !== this.props.inStockOnly
     }
 
     handleFilterTextChange (filterText) {
