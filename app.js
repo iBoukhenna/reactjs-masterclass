@@ -1,6 +1,12 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
+const Field = React.forwardRef(function (props, ref) {
+    return <div className="form-group">
+        <input type="text" className="form-control" ref={ref}/>
+    </div>
+})
+
 class Home extends React.Component {
 
     constructor (props) {
@@ -15,7 +21,7 @@ class Home extends React.Component {
 
     render () {
         return <div>
-            <input type="text" ref={this.input} />
+            <Field ref={this.input}/>
             <button onClick={this.handleClick}>Test</button>
         </div>
     }
