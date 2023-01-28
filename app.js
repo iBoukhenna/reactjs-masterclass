@@ -1,11 +1,18 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
-const Field = React.forwardRef(function (props, ref) {
-    return <div className="form-group">
-        <input type="text" className="form-control" ref={ref}/>
-    </div>
+const FieldWithRef = React.forwardRef((props, ref) => {
+    return <Field forwardRef={ref} />
 })
+
+class Field extends React.Component {
+
+    render () {
+        return <div className="form-group">
+            <input type="text" className="form-control" ref={this.props.forwardRef}/>
+        </div>
+    }
+}
 
 class Home extends React.Component {
 
@@ -21,7 +28,7 @@ class Home extends React.Component {
 
     render () {
         return <div>
-            <Field ref={this.input}/>
+            <FieldWithRef ref={this.input}/>
             <button onClick={this.handleClick}>Test</button>
         </div>
     }
