@@ -80,12 +80,25 @@ class Incrementer extends React.Component {
         this.setState({timer: window.setInterval(this.increment.bind(this), 1000)})
     }
 
+    label () {
+        return this.state.timer ? 'Pause' : 'Play'
+    }
+
+    toggle () {
+        return this.state.timer ? this.pause() : this.play()
+    }
+
+    reset () {
+        this.pause()
+        this.play()
+        this.setState((state, props) => ({count: props.start}))
+    }
+
     render () {
         return <div>
             Counter : {this.state.count}
-            {this.state.timer ?
-            <button onClick={this.pause.bind(this)}>Pause</button> : 
-            <button onClick={this.play.bind(this)}>Play</button> }
+            <button onClick={this.toggle.bind(this)}>{this.label()}</button>
+            <button onClick={this.reset.bind(this)}>Reset</button>
         </div>
     }
 }
