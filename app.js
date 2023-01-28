@@ -52,6 +52,19 @@ class TemperatureInput extends React.Component {
     }
 }
 
+function Button ({type, children}) {
+    const className = 'btn btn-' + type
+    return <button className={className}>{children}</button>
+}
+
+function PrimaryButton ({children}) {
+    return <Button type="primary">{children}</Button>
+}
+
+function SecondaryButton ({children}) {
+    return <Button type="secondary">{children}</Button>
+}
+
 class Calculator extends React.Component {
 
     constructor (props) {
@@ -90,6 +103,11 @@ class Calculator extends React.Component {
                 <br/>
                 <BoilingVerdict value={parseFloat(celsius)} />
                 <br/>
+                <Button type="primary">Send</Button>
+                <br/>
+                <PrimaryButton>Send</PrimaryButton>
+                <br/>
+                <SecondaryButton>Send</SecondaryButton>
             <br/>
             <br/>{JSON.stringify(this.state)}
         </div>
