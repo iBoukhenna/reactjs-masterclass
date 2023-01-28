@@ -1,125 +1,122 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
-const scaleNames = {
-    c: 'Celsius',
-    f: 'Fahrenheit'
+const PRODUCTS = [
+    {category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
+    {category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
+    {category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball"},
+    {category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch"},
+    {category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5"},
+    {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
+];
+
+function ProductRow ({product}) {
+    const name = product.stocked ? product.name : <span style={{color : 'red'}}>{product.name}</span>
+    return <tr>
+        <td>{name}</td>
+        <td>{product.price}</td>
+    </tr>
 }
 
-function toCelsius (fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9
+function ProductCategoryRow ({category}) {
+    return <tr>
+        <th colSpan="2">{category}</th>
+    </tr>
 }
 
-function toFahrenheit (celsius) {
-    return (celsius * 9 / 5) + 32
+function ProductTable ({products, inStockOnly, filterText}) {
+    const rows = []
+    let lastCategory = null
+
+    products.forEach(product => {
+        if (
+            (inStockOnly && !product.stocked) || 
+            product.name.indexOf(filterText) === -1
+        ) {
+            return
+        }
+        if (product.category !== lastCategory) {
+            lastCategory = product.category
+            rows.push(<ProductCategoryRow key={lastCategory} category={lastCategory} />)
+        }
+        rows.push(<ProductRow key={product.name} product={product} />)
+    })
+
+    return <table className="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {rows}
+        </tbody>
+    </table>
 }
 
-function tryConvert (temperature, convert) {
-    const value = parseFloat(temperature)
-    if (Number.isNaN(value)) {
-        return '';
-    }
-    return (Math.round(convert(value) * 100) / 100).toString()
-}
-
-function BoilingVerdict ({value}) {
-    if (value >= 100) {
-        return <div className="alert alert-success">The water would boil</div>
-    } else {
-        return <div className="alert alert-info">The water would not boil</div>
-    } 
-}
-
-class TemperatureInput extends React.Component {
+class SearchBar extends React.Component {
     constructor (props) {
         super(props)
-
-        this.handleChange = this.handleChange.bind(this)
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+        this.handleInStockChange = this.handleInStockChange.bind(this)
     }
 
-    handleChange (e) {
-        this.props.onTemperatureChange(e.target.value)
+    handleFilterTextChange (e) {
+        this.props.onFilterTextChange(e.target.value)
+    }
+
+    handleInStockChange (e) {
+        this.props.onStockChange(e.target.checked)
     }
 
     render () {
-        const {temperature} = this.props
-        const name = 'scale' + this.props.scale
-        const scaleName = scaleNames[this.props.scale];
-        return <div className="form-group">
-            <label htmlFor={name}>Temperature ({scaleName}) : </label>
-            <input type="text" id={name} name={name} value={temperature} onChange={this.handleChange} className="form-control" />
+        const {filterText, inStockOnly} = this.props
+        return <div className="mb-3">
+            <div className="form-group mb-0">
+                <input type="text" value={filterText} className="form-control" placeholder="Search" onChange={this.handleFilterTextChange} />
+            </div>
+            <div className="form-check">
+                <input type="checkbox" checked={inStockOnly} className="form-check-input" id="stock" onChange={this.handleInStockChange} />
+                <label htmlFor="stock" className="form-check-label">Product available</label>
+            </div>
         </div>
     }
 }
 
-function Button ({type, children}) {
-    const className = 'btn btn-' + type
-    return <button className={className}>{children}</button>
-}
-
-function PrimaryButton ({children}) {
-    return <Button type="primary">{children}</Button>
-}
-
-function SecondaryButton ({children}) {
-    return <Button type="secondary">{children}</Button>
-}
-
-function ColomnTwo ({left, right}) {
-    return <div className="row">
-        <div className="col-md-6">{left}</div>
-        <div className="col-md-6">{right}</div>
-    </div>
-}
-
-class Calculator extends React.Component {
+class FilterableProductTable extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
-            scale: 'c',
-            temperature: 20
+            filterText: '',
+            inStockOnly: false
         }
 
-        this.handleCelsiusChange = this.handleCelsiusChange.bind(this)
-        this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this)
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+        this.handleInStockChange = this.handleInStockChange.bind(this)
     }
 
-    handleFahrenheitChange (temperature) {
-        this.setState({
-            scale: 'f',
-            temperature
-        })
+    handleFilterTextChange (filterText) {
+        this.setState({filterText})
     }
 
-    handleCelsiusChange (temperature) {
-        this.setState({
-            scale: 'c',
-            temperature
-        })
+    handleInStockChange (inStockOnly) {
+        this.setState({inStockOnly})
     }
 
     render () {
-        const {temperature, scale} = this.state
-        const celsius = scale === 'c' ? temperature : tryConvert(temperature, toCelsius)
-        const fahrenheit = scale === 'f' ? temperature : tryConvert(temperature, toFahrenheit)
-        return <div>
-                <ColomnTwo 
-                    left={<TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />}
-                    right={<TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />}
-                    />
-                <br/>
-                <BoilingVerdict value={parseFloat(celsius)} />
-                <br/>
-                <Button type="primary">Send</Button>
-                <br/>
-                <PrimaryButton>Send</PrimaryButton>
-                <br/>
-                <SecondaryButton>Send</SecondaryButton>
-            <br/>
-            <br/>{JSON.stringify(this.state)}
-        </div>
+        const {products} = this.props
+        return <React.Fragment>
+            <SearchBar filterText={this.state.filterText} 
+                inStockOnly={this.state.inStockOnly}
+                onStockChange={this.handleInStockChange}
+                onFilterTextChange={this.handleFilterTextChange} />
+            <ProductTable products={products}
+                inStockOnly={this.state.inStockOnly}
+                filterText={this.state.filterText} />
+        </React.Fragment>
     }
 }
 
-root.render(<Calculator />)
+root.render(<FilterableProductTable products={PRODUCTS} />)
