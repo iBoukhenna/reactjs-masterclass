@@ -1,6 +1,18 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
+class Field extends React.Component {
+
+    render () {
+        const {name, label, value, onChange} = this.props
+        return <div className="form-group">
+            <label htmlFor={name}>{label} : </label>
+            <input type="text" id={name} name={name} value={value} onChange={onChange} />
+        </div>
+    }
+
+}
+
 class Home extends React.Component {
 
     constructor (props) {
@@ -32,10 +44,8 @@ class Home extends React.Component {
                     <label htmlFor="title">Title : </label>
                     <input type="text" id="title" name="title" defaultValue="Engineer" />
                 </div><br/>
-                <div className="form-group">
-                    <label htmlFor="name">Name : </label>
-                    <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange} />
-                </div><br/>
+                <Field name="name" label="Name" value={this.state.name} onChange={this.handleChange} />
+                <br/>
                 <div className="form-group">
                     <label htmlFor="address">Address : </label>
                     <textarea id="address" name="address" value={this.state.address} onChange={this.handleChange}></textarea>
