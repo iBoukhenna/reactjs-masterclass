@@ -1,128 +1,99 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
-function Field ({name, value, onChange, children}) {
-    return <div className="form-group">
-        <label htmlFor={name}>{children} : </label>
-        <input type="text" id={name} name={name} value={value} onChange={onChange} className="form-control" />
-    </div>
+const scaleNames = {
+    c: 'Celsius',
+    f: 'Fahrenheit'
 }
 
-function TextArea ({name, value, onChange, children}) {
-    return <div className="form-group">
-        <label htmlFor={name}>{children} : </label>
-        <textarea id={name} name={name} value={value} onChange={onChange} className="form-control"></textarea>
-    </div>
+function toCelsius (fahrenheit) {
+    return (fahrenheit - 32) * 5 / 9
 }
 
-function CheckBox ({name, value, onChange, children}) {
-    return <div className="form-check">
-        <label htmlFor={name}>{children} : </label>
-        <input type="checkbox" id={name} name={name} checked={value} onChange={onChange} className="form-control" />
-    </div>
+function toFahrenheit (celsius) {
+    return (celsius * 9 / 5) + 32
 }
 
-function MultiSelect ({name, value, items, onChange, children}) {
-    const options = items.map((item) => <option key={item.key} value={item.key}>{item.value}</option>)
-    return <div className="form-select">
-        <label htmlFor={name}>{children} : </label>
-        <select id={name} name={name} value={value} onChange={onChange} multiple className="form-control">
-            {options}
-        </select>
-    </div>
+function tryConvert (temperature, convert) {
+    const value = parseFloat(temperature)
+    if (Number.isNaN(value)) {
+        return '';
+    }
+    return (Math.round(convert(value) * 100) / 100).toString()
 }
 
-function Select ({name, value, items, onChange, children}) {
-    const options = items.map((item) => <option key={item.key} value={item.key}>{item.value}</option>)
-    return <div className="form-select">
-        <label htmlFor={name}>{children} : </label>
-        <select id={name} name={name} value={value} onChange={onChange} className="form-control">
-            {options}
-        </select>
-    </div>
+function BoilingVerdict ({value}) {
+    if (value >= 100) {
+        return <div className="alert alert-success">The water would boil</div>
+    } else {
+        return <div className="alert alert-info">The water would not boil</div>
+    } 
 }
 
-function CheckBox ({name, value, onChange, children}) {
-    return <div className="form-check">
-        <label htmlFor={name}>{children} : </label>
-        <input type="checkbox" id={name} name={name} checked={value} onChange={onChange} className="form-control" />
-    </div>
+class TemperatureInput extends React.Component {
+    constructor (props) {
+        super(props)
+
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange (e) {
+        this.props.onTemperatureChange(e.target.value)
+    }
+
+    render () {
+        const {temperature} = this.props
+        const name = 'scale' + this.props.scale
+        const scaleName = scaleNames[this.props.scale];
+        return <div className="form-group">
+            <label htmlFor={name}>Temperature ({scaleName}) : </label>
+            <input type="text" id={name} name={name} value={temperature} onChange={this.handleChange} className="form-control" />
+        </div>
+    }
 }
 
-class Home extends React.Component {
+class Calculator extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
-            last_name: '',
-            first_name: '',
-            address: '',
-            status: '',
-            projects: [],
-            gendre: false,
+            scale: 'c',
+            temperature: 20
         }
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleCelsiusChange = this.handleCelsiusChange.bind(this)
+        this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this)
     }
 
-    handleSubmit (e) {
-        e.preventDefault()
-        const data = JSON.stringify(this.state)
-        console.log(data)
+    handleFahrenheitChange (temperature) {
         this.setState({
-            last_name: '',
-            first_name: '',
-            address: '',
-            status: '',
-            projects: [],
-            gendre: false,
+            scale: 'f',
+            temperature
         })
     }
 
-    handleChange (e) {
-        const name = e.target.name
-        const type = e.target.type
-        const value = type === 'checkbox' ? e.target.checked : type === 'select-multiple' ? Array.from(e.target.selectedOptions).map(o => o.value) : e.target.value
+    handleCelsiusChange (temperature) {
         this.setState({
-            [name]: value
+            scale: 'c',
+            temperature
         })
     }
 
     render () {
-        const statusItems = [{key:"single",value:"Single"},{key:"married",value:"Married"},{key:"divorce",value:"Divorce"},{key:"separated",value:"Separated"}]
-        const projectItems = [{key:"P01",value:"Project 01"},{key:"P02",value:"Project 02"},{key:"P03",value:"Project 03"}]
-        return <form className="container" onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="title">Title : </label>
-                    <input type="text" id="title" name="title" defaultValue="Engineer" />
-                </div><br/>
-                <Field name="last_name" value={this.state.last_name} onChange={this.handleChange}>Last Name</Field>
+        const {temperature, scale} = this.state
+        const celsius = scale === 'c' ? temperature : tryConvert(temperature, toCelsius)
+        const fahrenheit = scale === 'f' ? temperature : tryConvert(temperature, toFahrenheit)
+        return <div>
+                <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
                 <br/>
-                <Field name="first_name" value={this.state.first_name} onChange={this.handleChange}>First Name</Field>
+                <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
                 <br/>
-                <TextArea name="address" value={this.state.address} onChange={this.handleChange}>Address</TextArea>
+                <BoilingVerdict value={parseFloat(celsius)} />
                 <br/>
-                <Select name="status" items={statusItems} value={this.state.status} onChange={this.handleChange}>Status</Select>
-                <br/>
-                <MultiSelect name="projects" items={projectItems} value={this.state.projects} onChange={this.handleChange}>Projects</MultiSelect>
-                <br/>
-                <CheckBox name="gendre" value={this.state.gendre} onChange={this.handleChange}>Gendre</CheckBox>
-                <br/>
-                <div className="form-group">
-                    <button className="btn btn-primary">Send</button>
-                </div>
             <br/>
             <br/>{JSON.stringify(this.state)}
-            <br/>{this.state.last_name}
-            <br/>{this.state.first_name}
-            <br/>{this.state.address}
-            <br/>{this.state.status}
-            <br/>{JSON.stringify(this.state.projects)}
-            <br/>{this.state.gendre ? 'man' : 'woman'}
-        </form>
-
+        </div>
     }
 }
 
-root.render(<Home />)
+root.render(<Calculator />)
