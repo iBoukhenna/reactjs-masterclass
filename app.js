@@ -10,17 +10,15 @@ const PRODUCTS = [
     {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
 ];
 
-function ProductRowComponent ({product}) {
+const ProductRow =  React.memo(function ({product}) {
     const name = product.stocked ? product.name : <span style={{color : 'red'}}>{product.name}</span>
-    console.log('render')
+    //console.log('render')
     //wait(500)
     return <tr>
         <td>{name}</td>
         <td>{product.price}</td>
     </tr>
-}
-
-const ProductRow = React.memo(ProductRowComponent)
+})
 
 function ProductCategoryRow ({category}) {
     return <tr>
@@ -88,7 +86,7 @@ class SearchBar extends React.Component {
     }
 }
 
-class FilterableProductTable extends React.Component {
+class FilterableProductTable extends React.PureComponent {
 
     constructor (props) {
         super(props)
@@ -110,6 +108,7 @@ class FilterableProductTable extends React.Component {
     }
 
     render () {
+        console.log('render')
         const {products} = this.props
         return <React.Fragment>
             <SearchBar filterText={this.state.filterText} 
@@ -124,3 +123,14 @@ class FilterableProductTable extends React.Component {
 }
 
 root.render(<FilterableProductTable products={PRODUCTS} />)
+
+//const PRODUCTS2 = PRODUCTS
+//PRODUCTS2.push({category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 8"})
+
+const PRODUCTS2 = [...PRODUCTS, {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 8"}]
+
+
+window.setTimeout(function () {
+    root.render(<FilterableProductTable products={PRODUCTS2} />)
+}, 20000)
+
