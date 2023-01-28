@@ -1,143 +1,97 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
-function WelcomeFunc ({name, children}) {
-    return <div>
-        <h1>Hello {name}</h1>
-        <p>{children}</p>
-    </div>
-}
 
-class Welcome extends React.Component {
+class Home extends React.Component {
 
-    // super must be called
     constructor (props) {
         super(props)
+        this.state = {
+            name: 'Amine',
+            address: 'Algiers',
+            status: 'married',
+            projects: ['P01', 'P03'],
+            gendre: true,
+        }
+
+        this.handleChange = this.handleChange.bind(this)
+        this.handleChangeTextArea = this.handleChangeTextArea.bind(this)
+        this.handleChangeStatus = this.handleChangeStatus.bind(this)
+        this.handleChangeProjects = this.handleChangeProjects.bind(this)
+        this.handleChangeGendre = this.handleChangeGendre.bind(this)
+    }
+
+    handleChange (e) {
+        this.setState({
+            name: e.target.value
+        })
+    }
+
+    handleChangeTextArea (e) {
+        this.setState({
+            address: e.target.value
+        })
+    }
+
+    handleChangeStatus (e) {
+        this.setState({
+            status: e.target.value
+        })
+    }
+
+    handleChangeProjects (e) {
+        this.setState({
+            projects: Array.from(e.target.selectedOptions).map(o => o.value)
+        })
+    }
+
+    handleChangeGendre (e) {
+        this.setState({
+            gendre: e.target.checked
+        })
     }
 
     render () {
         return <div>
-            <h1>Hello {this.props.name}</h1>
-            <p>{this.props.children}</p>
+                <div>
+                    <label htmlFor="name">Name : </label>
+                    <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange} />
+                </div><br/>
+                <div>
+                    <label htmlFor="address">Address : </label>
+                    <textarea id="address" name="address" value={this.state.address} onChange={this.handleChangeTextArea}></textarea>
+                </div><br/>
+                <div>
+                    <label htmlFor="status">Status : </label>
+                    <select id="status" name="status" value={this.state.status} onChange={this.handleChangeStatus}>
+                        <option value="single">single</option>
+                        <option value="married">married</option>
+                        <option value="divorce">divorce</option>
+                        <option value="separated">separated</option>
+                    </select>
+                </div><br/>
+                <div>
+                    <label htmlFor="projects">Projects : </label>
+                    <select id="projects" name="projects" value={this.state.projects} onChange={this.handleChangeProjects} multiple>
+                        <option value="P01">Project 01</option>
+                        <option value="P02">Project 02</option>
+                        <option value="P03">Project 03</option>
+                    </select>
+                </div><br/>
+                <div>
+                    <label htmlFor="gendre">Gendre : </label>
+                    <input type="checkbox" id="gendre" name="gendre" value={this.state.gendre} onChange={this.handleChangeGendre} />
+                </div><br/>
+            <br/>
+            <br/>{JSON.stringify(this.state)}
+            <br/>{this.state.name}
+            <br/>{this.state.address}
+            <br/>{this.state.status}
+            <br/>{JSON.stringify(this.state.projects)}
+            <br/>{this.state.gendre ? 'man' : 'woman'}
         </div>
+
     }
-}
-
-class Clock extends React.Component {
-
-    constructor (props) {
-        super(props)
-        // state is an object that will represent the useful data inside the component
-        this.state = {date : new Date()}
-        this.timer = null
-    }
-
-    componentDidMount () {
-        this.timer = window.setInterval(this.tick.bind(this), 1000)
-    }
-
-    componentWillUnmount () {
-        window.clearInterval(this.timer)
-    }
-
-    tick () {
-        this.setState({date: new Date()})
-    }
-
-    render () {
-        return <div>
-            It's {this.state.date.toLocaleDateString()} {this.state.date.toLocaleTimeString()}
-        </div>
-    }
-}
-
-class Incrementer extends React.Component {
-
-    constructor (props) {
-        super(props)
-        this.state = {count: props.start, timer: null}
-        this.toggle = this.toggle.bind(this)
-        this.reset = this.reset.bind(this)
-    }
-
-    componentDidMount () {
-        this.play()
-    }
-
-    componentWillUnmount () {
-        window.clearInterval(this.state.timer)        
-    }
-
-    increment () {
-        this.setState((state, props) => ({count: state.count + props.step}))
-    }
-
-    pause () {
-        window.clearInterval(this.state.timer)        
-        this.setState({timer: null})
-    }
-
-    play () {
-        window.clearInterval(this.state.timer)        
-        this.setState({timer: window.setInterval(this.increment.bind(this), 1000)})
-    }
-
-    label () {
-        return this.state.timer ? 'Pause' : 'Play'
-    }
-
-    toggle () {
-        return this.state.timer ? this.pause() : this.play()
-    }
-
-    reset () {
-        this.pause()
-        this.play()
-        this.setState((state, props) => ({count: props.start}))
-    }
-
-    render () {
-        console.log('render')
-        return <div>
-            Counter : {this.state.count}
-            <button onClick={this.toggle}>{this.label()}</button>
-            <button onClick={this.reset}>Reset</button>
-        </div>
-    }
-}
-
-Incrementer.defaultProps = {
-    start:0,
-    step: 1
-}
-
-class ManualIncrementer extends React.Component {
-    constructor (props) {
-        super(props)
-        this.state = {mcount: 0}
-    }
-
-    increment (e) {
-        e.preventDefault()
-        this.setState((state, props) => ({mcount: state.mcount + 1}))
-    }
-
-    render () {
-        return <div>
-            Manual Counter : {this.state.mcount} <a herf="https://www.google.com" onClick={this.increment.bind(this)}>Increment</a>
-        </div>
-    }
-}
-
-function Home () {
-    return <div>
-        <Welcome name="Amine" />
-        <Welcome name="Ahmed" />
-        <Clock />
-        <Incrementer start={10} />
-        <Incrementer start={100} step={10} />
-        <ManualIncrementer />
-    </div>
 }
 
 root.render(<Home />)
