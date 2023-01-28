@@ -54,15 +54,30 @@ class Home extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            last_name: 'Amine',
-            first_name: 'Ahmed',
-            address: 'Algiers',
-            status: 'married',
-            projects: ['P01', 'P03'],
-            gendre: true,
+            last_name: '',
+            first_name: '',
+            address: '',
+            status: '',
+            projects: [],
+            gendre: false,
         }
 
         this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleSubmit (e) {
+        e.preventDefault()
+        const data = JSON.stringify(this.state)
+        console.log(data)
+        this.setState({
+            last_name: '',
+            first_name: '',
+            address: '',
+            status: '',
+            projects: [],
+            gendre: false,
+        })
     }
 
     handleChange (e) {
@@ -77,7 +92,7 @@ class Home extends React.Component {
     render () {
         const statusItems = [{key:"single",value:"Single"},{key:"married",value:"Married"},{key:"divorce",value:"Divorce"},{key:"separated",value:"Separated"}]
         const projectItems = [{key:"P01",value:"Project 01"},{key:"P02",value:"Project 02"},{key:"P03",value:"Project 03"}]
-        return <div className="container">
+        return <form className="container" onSubmit={this.handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="title">Title : </label>
                     <input type="text" id="title" name="title" defaultValue="Engineer" />
@@ -94,6 +109,9 @@ class Home extends React.Component {
                 <br/>
                 <CheckBox name="gendre" value={this.state.gendre} onChange={this.handleChange}>Gendre</CheckBox>
                 <br/>
+                <div className="form-group">
+                    <button className="btn btn-primary">Send</button>
+                </div>
             <br/>
             <br/>{JSON.stringify(this.state)}
             <br/>{this.state.last_name}
@@ -102,7 +120,7 @@ class Home extends React.Component {
             <br/>{this.state.status}
             <br/>{JSON.stringify(this.state.projects)}
             <br/>{this.state.gendre ? 'man' : 'woman'}
-        </div>
+        </form>
 
     }
 }
