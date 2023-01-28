@@ -27,7 +27,12 @@ class Home extends React.Component {
     }
 
     render () {
+        console.log('render')
         return <div>
+                <div>
+                    <label htmlFor="title">Title : </label>
+                    <input type="text" id="title" name="title" defaultValue="Engineer" />
+                </div><br/>
                 <div>
                     <label htmlFor="name">Name : </label>
                     <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange} />
