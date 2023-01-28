@@ -1,7 +1,6 @@
 const container = document.querySelector('#app')
 const root = ReactDOM.createRoot(container)
 
-
 class Home extends React.Component {
 
     constructor (props) {
@@ -29,19 +28,19 @@ class Home extends React.Component {
     render () {
         console.log('render')
         return <div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="title">Title : </label>
                     <input type="text" id="title" name="title" defaultValue="Engineer" />
                 </div><br/>
-                <div>
+                <div className="form-group">
                     <label htmlFor="name">Name : </label>
                     <input type="text" id="name" name="name" value={this.state.name} onChange={this.handleChange} />
                 </div><br/>
-                <div>
+                <div className="form-group">
                     <label htmlFor="address">Address : </label>
                     <textarea id="address" name="address" value={this.state.address} onChange={this.handleChange}></textarea>
                 </div><br/>
-                <div>
+                <div className="form-group">
                     <label htmlFor="status">Status : </label>
                     <select id="status" name="status" value={this.state.status} onChange={this.handleChange}>
                         <option value="single">single</option>
@@ -50,7 +49,7 @@ class Home extends React.Component {
                         <option value="separated">separated</option>
                     </select>
                 </div><br/>
-                <div>
+                <div className="form-group">
                     <label htmlFor="projects">Projects : </label>
                     <select id="projects" name="projects" value={this.state.projects} onChange={this.handleChange} multiple>
                         <option value="P01">Project 01</option>
@@ -58,7 +57,7 @@ class Home extends React.Component {
                         <option value="P03">Project 03</option>
                     </select>
                 </div><br/>
-                <div>
+                <div className="form-group">
                     <label htmlFor="gendre">Gendre : </label>
                     <input type="checkbox" id="gendre" name="gendre" value={this.state.gendre} onChange={this.handleChange} />
                 </div><br/>
