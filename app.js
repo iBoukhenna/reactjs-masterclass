@@ -7,7 +7,7 @@ class Field extends React.Component {
         const {name, label, value, onChange} = this.props
         return <div className="form-group">
             <label htmlFor={name}>{label} : </label>
-            <input type="text" id={name} name={name} value={value} onChange={onChange} />
+            <input type="text" id={name} name={name} value={value} onChange={onChange} className="form-control" />
         </div>
     }
 
