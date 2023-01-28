@@ -13,6 +13,13 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
     <script src="app.js" defer type="text/babel"></script>
+
+    <script>
+        function wait(t) {
+            const start = Date.now()
+            while (Date.now() - start < t) {}
+        }
+    </script>
 </head>
 <body>
     <div id="app">

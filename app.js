@@ -10,13 +10,17 @@ const PRODUCTS = [
     {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"}
 ];
 
-function ProductRow ({product}) {
+function ProductRowComponent ({product}) {
     const name = product.stocked ? product.name : <span style={{color : 'red'}}>{product.name}</span>
+    console.log('render')
+    //wait(500)
     return <tr>
         <td>{name}</td>
         <td>{product.price}</td>
     </tr>
 }
+
+const ProductRow = React.memo(ProductRowComponent)
 
 function ProductCategoryRow ({category}) {
     return <tr>
