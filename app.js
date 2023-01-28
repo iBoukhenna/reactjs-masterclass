@@ -15,39 +15,14 @@ class Home extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this)
-        this.handleChangeTextArea = this.handleChangeTextArea.bind(this)
-        this.handleChangeStatus = this.handleChangeStatus.bind(this)
-        this.handleChangeProjects = this.handleChangeProjects.bind(this)
-        this.handleChangeGendre = this.handleChangeGendre.bind(this)
     }
 
     handleChange (e) {
+        const name = e.target.name
+        const type = e.target.type
+        const value = type === 'checkbox' ? e.target.checked : type === 'select-multiple' ? Array.from(e.target.selectedOptions).map(o => o.value) : e.target.value
         this.setState({
-            name: e.target.value
-        })
-    }
-
-    handleChangeTextArea (e) {
-        this.setState({
-            address: e.target.value
-        })
-    }
-
-    handleChangeStatus (e) {
-        this.setState({
-            status: e.target.value
-        })
-    }
-
-    handleChangeProjects (e) {
-        this.setState({
-            projects: Array.from(e.target.selectedOptions).map(o => o.value)
-        })
-    }
-
-    handleChangeGendre (e) {
-        this.setState({
-            gendre: e.target.checked
+            [name]: value
         })
     }
 
@@ -59,11 +34,11 @@ class Home extends React.Component {
                 </div><br/>
                 <div>
                     <label htmlFor="address">Address : </label>
-                    <textarea id="address" name="address" value={this.state.address} onChange={this.handleChangeTextArea}></textarea>
+                    <textarea id="address" name="address" value={this.state.address} onChange={this.handleChange}></textarea>
                 </div><br/>
                 <div>
                     <label htmlFor="status">Status : </label>
-                    <select id="status" name="status" value={this.state.status} onChange={this.handleChangeStatus}>
+                    <select id="status" name="status" value={this.state.status} onChange={this.handleChange}>
                         <option value="single">single</option>
                         <option value="married">married</option>
                         <option value="divorce">divorce</option>
@@ -72,7 +47,7 @@ class Home extends React.Component {
                 </div><br/>
                 <div>
                     <label htmlFor="projects">Projects : </label>
-                    <select id="projects" name="projects" value={this.state.projects} onChange={this.handleChangeProjects} multiple>
+                    <select id="projects" name="projects" value={this.state.projects} onChange={this.handleChange} multiple>
                         <option value="P01">Project 01</option>
                         <option value="P02">Project 02</option>
                         <option value="P03">Project 03</option>
@@ -80,7 +55,7 @@ class Home extends React.Component {
                 </div><br/>
                 <div>
                     <label htmlFor="gendre">Gendre : </label>
-                    <input type="checkbox" id="gendre" name="gendre" value={this.state.gendre} onChange={this.handleChangeGendre} />
+                    <input type="checkbox" id="gendre" name="gendre" value={this.state.gendre} onChange={this.handleChange} />
                 </div><br/>
             <br/>
             <br/>{JSON.stringify(this.state)}
