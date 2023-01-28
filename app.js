@@ -65,6 +65,13 @@ function SecondaryButton ({children}) {
     return <Button type="secondary">{children}</Button>
 }
 
+function ColomnTwo ({left, right}) {
+    return <div className="row">
+        <div className="col-md-6">{left}</div>
+        <div className="col-md-6">{right}</div>
+    </div>
+}
+
 class Calculator extends React.Component {
 
     constructor (props) {
@@ -97,9 +104,10 @@ class Calculator extends React.Component {
         const celsius = scale === 'c' ? temperature : tryConvert(temperature, toCelsius)
         const fahrenheit = scale === 'f' ? temperature : tryConvert(temperature, toFahrenheit)
         return <div>
-                <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
-                <br/>
-                <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
+                <ColomnTwo 
+                    left={<TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />}
+                    right={<TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />}
+                    />
                 <br/>
                 <BoilingVerdict value={parseFloat(celsius)} />
                 <br/>
