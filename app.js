@@ -55,25 +55,37 @@ class Incrementer extends React.Component {
 
     constructor (props) {
         super(props)
-        this.state = {count: props.start}
-        this.timer = null
+        this.state = {count: props.start, timer: null}
     }
 
     componentDidMount () {
-        this.timer = window.setInterval(this.increment.bind(this), 1000)
+        this.play()
     }
 
     componentWillUnmount () {
-        window.clearInterval(this.timer)        
+        window.clearInterval(this.state.timer)        
     }
 
     increment () {
         this.setState((state, props) => ({count: state.count + props.step}))
     }
 
+    pause () {
+        window.clearInterval(this.state.timer)        
+        this.setState({timer: null})
+    }
+
+    play () {
+        window.clearInterval(this.state.timer)        
+        this.setState({timer: window.setInterval(this.increment.bind(this), 1000)})
+    }
+
     render () {
         return <div>
             Counter : {this.state.count}
+            {this.state.timer ?
+            <button onClick={this.pause.bind(this)}>Pause</button> : 
+            <button onClick={this.play.bind(this)}>Play</button> }
         </div>
     }
 }
