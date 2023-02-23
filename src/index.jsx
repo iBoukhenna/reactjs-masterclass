@@ -3,12 +3,15 @@ import React, { useState } from 'react'
 
 function Counter () {
     // distructur the contains
-    const [count, setCount] = useState(0)
+    const [state, setState] = useState({})
+    // react use the execution context to know which instance of component to be update 
     const handleClick = function (e) {
         e.preventDefault()
-        setCount(10)
+        setState({
+            count: 10
+        })
     }
-    return <button onClick={handleClick}>Nomber : {count} </button>
+    return <div onClick={handleClick}>{JSON.stringify(state)}</div>
 }
 
 const rootElement = document.getElementById("app");
