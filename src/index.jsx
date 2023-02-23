@@ -1,21 +1,25 @@
 import { createRoot } from 'react-dom/client'
 import React, { useState } from 'react'
 
-function Counter () {
+// hook is simple function prefix by use
+function useIncrease () {
+    // call react hook
     const [count, setCount] = useState(0)
-    const [count2, setCount2] = useState(0)
-    // react use the execution context to know which instance of component to be update 
-    const handleClick = function (e) {
-        e.preventDefault()
+    // create function to set count
+    const increase = () => {
         setCount(c => c + 1)
     }
-    const handleClick2 = function (e) {
-        e.preventDefault()
-        setCount2(c => c + 2)
-    }
+    // return count and function
+    return [count, increase]
+}
+
+function Counter () {
+    // use our hook
+    const [count, increase] = useIncrease()
+
+    // call function
     return <>
-        <button onClick={handleClick}>increase : {count}</button>
-        <button onClick={handleClick2}>increase : {count2}</button>
+        <button onClick={increase}>increase : {count}</button>
     </>
 }
 
