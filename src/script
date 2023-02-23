@@ -1,0 +1,5 @@
+yarn init -y
+yarn add react react-dom
+yarn add -D parcel-bundler
+npx parcel index.html
+npx parcel build index.html
