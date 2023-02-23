@@ -15,10 +15,16 @@ function Counter () {
     const [count, increase] = useIncrease(5, 2)
 
     // diffrence with document.title = 'Counter ' + count
-    // with useEffect the title change only if the count change
+    // with useEffect the title change only if the param count change
     useEffect(() => {
-        document.title = 'Counter ' + count
-    }, [count])
+        const timer = window.setInterval(() => {
+            console.log('hello')
+            increase()
+        }, 1000)
+        return function () {
+            clearInterval(timer)
+        }
+    }, [])
 
     return <>
         <button onClick={increase}>increase : {count}</button>
@@ -32,3 +38,9 @@ root.render(
         <Counter />
     </div>
 )
+
+window.setTimeout(() => {
+    root.render(
+        <div>Bonjour</div>
+    )
+}, 2000)
