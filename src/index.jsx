@@ -26,6 +26,10 @@ function Counter () {
         }
     }, [])
 
+    useEffect(() => {
+        document.title = 'Counter ' + count
+    }, [count])
+
     return <>
         <button onClick={increase}>increase : {count}</button>
     </>
@@ -38,9 +42,3 @@ root.render(
         <Counter />
     </div>
 )
-
-window.setTimeout(() => {
-    root.render(
-        <div>Bonjour</div>
-    )
-}, 2000)
