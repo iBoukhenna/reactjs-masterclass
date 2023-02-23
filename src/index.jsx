@@ -2,12 +2,12 @@ import { createRoot } from 'react-dom/client'
 import React, { useState } from 'react'
 
 // hook is simple function prefix by use
-function useIncrease () {
+function useIncrease (init, step) {
     // call react hook
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(init)
     // create function to set count
     const increase = () => {
-        setCount(c => c + 1)
+        setCount(c => c + step)
     }
     // return count and function
     return [count, increase]
@@ -15,7 +15,7 @@ function useIncrease () {
 
 function Counter () {
     // use our hook
-    const [count, increase] = useIncrease()
+    const [count, increase] = useIncrease(5, 2)
 
     // call function
     return <>
