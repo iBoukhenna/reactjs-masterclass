@@ -3,3 +3,6 @@ yarn add react react-dom
 yarn add -D parcel-bundler
 npx parcel index.html
 npx parcel build index.html
+
+yarn remove parcel-bundler
+yarn add -D parcel@next
