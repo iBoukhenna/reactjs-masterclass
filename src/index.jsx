@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useCallback } from 'react'
 
 function wait(duration) {
     const t = Date.now()
@@ -20,10 +20,9 @@ const Button = React.memo(function ({onClick}) {
 function App () {
     const [count, setCount] = useState(0)
 
-    const handleClick = useMemo(function () {
-        return function () { 
+    // replace useMemo by useCallback when the return is the function
+    const handleClick = useCallback(function () {
             alert('Hello')
-        }
     }, [])
 
     return <div>
