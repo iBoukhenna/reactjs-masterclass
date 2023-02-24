@@ -22,8 +22,8 @@ function App () {
 
     // replace useMemo by useCallback when the return is the function
     const handleClick = useCallback(function () {
-            alert('Hello')
-    }, [])
+            alert('Hello' + count)
+    }, [count])
 
     return <div>
         <Button onClick={handleClick} />
