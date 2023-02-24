@@ -1,25 +1,29 @@
 import { createRoot } from 'react-dom/client'
 import React, { useReducer } from 'react'
 
+function init (initValue) {
+    return {count: initValue}
+}
+
 function reducer (state, action) {
     switch (action.type) {
         case 'increase':
-            return state + 1;
+            return {count: state.count + 1};
         case 'decrease':
-            if (state <= 0) {
+            if (state.count <= 0) {
                 return state;
             }
-            return state - 1;
+            return {count: state.count - 1};
         default:
             throw new Error("L'action " + action.type + " est inconnue")
     }
 }
 
 function App () {
-    const [count, dispatch] = useReducer(reducer, 0)
+    const [count, dispatch] = useReducer(reducer, 0, init)
 
     return <div>
-        Counter : {count}
+        Counter : {JSON.stringify(count)}
         <button onClick={() => dispatch({type: 'increase'})}>Increase</button>
         <button onClick={() => dispatch({type: 'decrease'})}>Decrease</button>
     </div>
