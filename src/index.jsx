@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 function wait(duration) {
     const t = Date.now()
@@ -29,7 +29,12 @@ function App () {
         }
     }
 
-    const encoded = encode(number)
+    const encoded = useMemo(function () {
+        return encode(number)
+    }, [number])
+    // without useMemo when we change the name the function is called
+    // with useMemo when only the number change the function will be called
+    //const encoded = encode(number)
 
     return <div>
         <div className="form-group">
