@@ -1,20 +1,31 @@
 import { createRoot } from 'react-dom/client'
-import React, { useState, useRef } from 'react'
+import React, { useLayoutEffect, useCallback, useState } from 'react'
 
-function App () {
-
-    const input = useRef(null)
-
-    const counter = useRef({count: 0})
-
-    const handleButtonClick = function () {
-        counter.current.count++
-        console.log(counter)
+function wait(duration) {
+    const t = Date.now()
+    while (true) {
+        if (Date.now() - t > duration) {
+            return true
+        }
     }
 
+}
+
+function App () {
+    const [count, setCount] = useState(0)
+
+    const increase = useCallback(() => {
+        setCount(c => c + 1)
+    }, [])
+
+    // useEffect is async but useLayoutEffect is sync
+    useLayoutEffect(() => {
+        wait(1000)
+        console.log(count)
+    })
+
     return <div>
-        <input type="text" ref={input} />
-        <button onClick={handleButtonClick}>Get value</button>
+        <button onClick={increase}>Increase {count}</button>
     </div>
 }
 
