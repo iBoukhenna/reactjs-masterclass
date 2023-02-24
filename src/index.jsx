@@ -8,12 +8,14 @@ function init (initValue) {
 function reducer (state, action) {
     switch (action.type) {
         case 'increase':
-            return {count: state.count + 1};
+            return {count: state.count + (action.payload || 1)};
         case 'decrease':
             if (state.count <= 0) {
                 return state;
             }
             return {count: state.count - 1};
+        case 'reset':
+            return init(0);
         default:
             throw new Error("L'action " + action.type + " est inconnue")
     }
@@ -25,8 +27,16 @@ function App () {
     return <div>
         Counter : {JSON.stringify(count)}
         <button onClick={() => dispatch({type: 'increase'})}>Increase</button>
+        <button onClick={() => dispatch({type: 'increase', payload: 10})}>Increase 10</button>
         <button onClick={() => dispatch({type: 'decrease'})}>Decrease</button>
+        <button onClick={() => dispatch({type: 'reset'})}>Reset</button>
+        <Child />
     </div>
+}
+
+function Child () {
+    console.log('render')
+    return <div>Hello</div>
 }
 
 const rootElement = document.getElementById("app");
