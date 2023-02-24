@@ -5,8 +5,11 @@ function App () {
 
     const input = useRef(null)
 
+    const counter = useRef({count: 0})
+
     const handleButtonClick = function () {
-        console.log(input.current.value)
+        counter.current.count++
+        console.log(counter)
     }
 
     return <div>
