@@ -1,122 +1,46 @@
 import { createRoot } from 'react-dom/client'
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-function useIncrease (init = 0, step = 1) {
-    const [count, setCount] = useState(init)
-
-    const increase = () => {
-        setCount(c => c + step)
-    }
-
-    return [count, increase]
-}
-
-function useAutoIncrease (init = 0, step = 1) {
-    const [count, increase] = useIncrease(init, step)
-
-    useEffect(function () {
-        const timer = window.setInterval(() => {
-            increase()
-        }, 1000)
-
-        return function () {
-            clearInterval(timer)
+function wait(duration) {
+    const t = Date.now()
+    while (true) {
+        if (Date.now() - t > duration) {
+            return true
         }
-    }, [])
-
-    return count
-}
-
-function useToggle (init = true) {
-    const [value, setValue] = useState(init)
-    const toggle = function () {
-        setValue(v => !v)
-    }
-    return [value, toggle]
-}
-
-function useFetch (url) {
-    const [state, setState] = useState({
-        items: [],
-        loading: true
-    })
-
-    useEffect(function () {
-        (async function () {
-            const response = await fetch(url)
-            const responseData = await response.json()
-            if (response.ok) {
-                setState({
-                    items: responseData,
-                    loading: false
-                })
-            } else {
-                alert(JSON.stringify(responseData))
-                setState(s => ({...s, loading: false}))
-            }
-        })()
-    }, [])
-
-    return [
-        state.loading, 
-        state.items
-    ]
-}
-
-function PostTable () {
-    const [loading, items] = useFetch('https://jsonplaceholder.typicode.com/comments?_limit=200')
-
-    if (loading) {
-        return 'Chargement ...'
     }
 
-    return <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Body</th>
-            </tr>
-        </thead>
-        <tbody>
-            {items.map(item => <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
-                <td>{item.body}</td>
-            </tr>)}
-        </tbody>
-    </table>
 }
 
-function TodoList () {
-    const [loading, todos] = useFetch('https://jsonplaceholder.typicode.com/todos?_limit=10')
-
-    if (loading) {
-        return 'Chargement ...'
-    }
-
-    return <ul>
-        {todos.map(t => <li key={t.title}>{t.title}</li>)}
-    </ul>
-}
-
-function Counter () {
-    const count = useAutoIncrease(10)
-
-    return <>
-        <button>increase : {count}</button>
-    </>
+function encode (number) {
+    wait(1000)
+    return Date.now()
 }
 
 function App () {
-    const [counterVisible, toggleCounter] = useToggle(true)
+    const [name, setName] = useState('Amine')
+    const [number, setNumber] = useState(0)
+
+    const onChange = function (e) {
+        if (e.target.getAttribute('name') === 'name') {
+            setName(e.target.value)
+        }
+        if (e.target.name === 'number') {
+            setNumber(e.target.value)
+        }
+    }
+
+    const encoded = encode(number)
 
     return <div>
-        Show the counter <input type="checkbox" onChange={toggleCounter} checked={counterVisible} />
-        <br />
-        {counterVisible && <Counter />}
-        <TodoList />
-        <PostTable />
+        <div className="form-group">
+            <label htmlFor="name"></label>
+            <input name="name" id="name" type="text" value={name} onChange={onChange} />
+        </div>
+        <div className="form-group">
+            <label htmlFor="number"></label>
+            <input name="number" id="number" type="text" value={number} onChange={onChange} />
+        </div>
+        <h2>Encoded : {encoded}</h2>
     </div>
 }
 
