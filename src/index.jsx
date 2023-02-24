@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import React, { useState, useEffect } from 'react'
 
-function useIncrease (init, step) {
+function useIncrease (init = 0, step = 1) {
     const [count, setCount] = useState(init)
 
     const increase = () => {
@@ -11,34 +11,52 @@ function useIncrease (init, step) {
     return [count, increase]
 }
 
-function Counter () {
-    const [count, increase] = useIncrease(5, 2)
+function useAutoIncrease (init = 0, step = 1) {
+    const [count, increase] = useIncrease(init, step)
 
-    // diffrence with document.title = 'Counter ' + count
-    // with useEffect the title change only if the param count change
-    useEffect(() => {
+    useEffect(function () {
         const timer = window.setInterval(() => {
-            console.log('hello')
             increase()
         }, 1000)
+
         return function () {
             clearInterval(timer)
         }
     }, [])
 
-    useEffect(() => {
-        document.title = 'Counter ' + count
-    }, [count])
+    return count
+}
+
+function useToggle (init = true) {
+    const [value, setValue] = useState(init)
+    const toggle = function () {
+        setValue(v => !v)
+    }
+    return [value, toggle]
+}
+
+function Counter () {
+    const count = useAutoIncrease(10)
 
     return <>
-        <button onClick={increase}>increase : {count}</button>
+        <button>increase : {count}</button>
     </>
+}
+
+function App () {
+    const [counterVisible, toggleCounter] = useToggle(true)
+
+    return <div>
+        Show the counter <input type="checkbox" onChange={toggleCounter} checked={counterVisible} />
+        <br />
+        {counterVisible && <Counter />}
+    </div>
 }
 
 const rootElement = document.getElementById("app");
 const root = createRoot(rootElement);
 root.render(
     <div>
-        <Counter />
+        <App />
     </div>
 )
