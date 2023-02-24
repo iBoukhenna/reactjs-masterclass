@@ -11,7 +11,8 @@ function wait(duration) {
 
 }
 
-const Button = React.memo (function ({onClick}) {
+const Button = React.memo(function ({onClick}) {
+    // this function will be called for each click because it's a new instance
     console.log('render')
     return <button onClick={onClick}>My button</button>
 })
@@ -19,9 +20,11 @@ const Button = React.memo (function ({onClick}) {
 function App () {
     const [count, setCount] = useState(0)
 
-    const handleClick = function () {
-        alert('Hello')
-    }
+    const handleClick = useMemo(function () {
+        return function () { 
+            alert('Hello')
+        }
+    }, [])
 
     return <div>
         <Button onClick={handleClick} />
