@@ -35,22 +35,36 @@ function useToggle (init = true) {
     return [value, toggle]
 }
 
-function PostTable () {
-    const [items, setItems] = useState([])
-    const [loading, setLoading] = useState(true)
+function useFetch (url) {
+    const [state, setState] = useState({
+        items: [],
+        loading: true
+    })
 
     useEffect(function () {
         (async function () {
-            const response = await fetch('https://jsonplaceholder.typicode.com/comments?_limit=200')
+            const response = await fetch(url)
             const responseData = await response.json()
             if (response.ok) {
-                setItems(responseData)
+                setState({
+                    items: responseData,
+                    loading: false
+                })
             } else {
                 alert(JSON.stringify(responseData))
+                setState(s => ({...s, loading: false}))
             }
-            setLoading(false)
         })()
     }, [])
+
+    return [
+        state.loading, 
+        state.items
+    ]
+}
+
+function PostTable () {
+    const [loading, items] = useFetch('https://jsonplaceholder.typicode.com/comments?_limit=200')
 
     if (loading) {
         return 'Chargement ...'
@@ -75,21 +89,7 @@ function PostTable () {
 }
 
 function TodoList () {
-    const [todos, setTodos] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    useEffect(function () {
-        (async function () {
-            const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10')
-            const responseData = await response.json()
-            if (response.ok) {
-                setTodos(responseData)
-            } else {
-                alert(JSON.stringify(responseData))
-            }
-            setLoading(false)
-        })()
-    }, [])
+    const [loading, todos] = useFetch('https://jsonplaceholder.typicode.com/todos?_limit=10')
 
     if (loading) {
         return 'Chargement ...'
