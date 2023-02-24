@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import React, { useLayoutEffect, useCallback, useState } from 'react'
+import React, { useLayoutEffect, useCallback, useState, useRef } from 'react'
 
 function wait(duration) {
     const t = Date.now()
@@ -13,19 +13,24 @@ function wait(duration) {
 
 function App () {
     const [count, setCount] = useState(0)
+    const button = useRef(null)
 
     const increase = useCallback(() => {
         setCount(c => c + 1)
     }, [])
 
     // useEffect is async but useLayoutEffect is sync
+    // useLayoutEffect for DOM manup otherwise use useEffect
     useLayoutEffect(() => {
-        wait(1000)
-        console.log(count)
-    })
+        if (count % 2 === 0) {
+            button.current.style.color = 'red'
+        } else {
+            button.current.style.color = 'green'
+        }
+    }, [count])
 
     return <div>
-        <button onClick={increase}>Increase {count}</button>
+        <button ref={button} onClick={increase}>Increase {count}</button>
     </div>
 }
 
