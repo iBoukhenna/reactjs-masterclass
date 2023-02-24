@@ -35,6 +35,45 @@ function useToggle (init = true) {
     return [value, toggle]
 }
 
+function PostTable () {
+    const [items, setItems] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(function () {
+        (async function () {
+            const response = await fetch('https://jsonplaceholder.typicode.com/comments?_limit=200')
+            const responseData = await response.json()
+            if (response.ok) {
+                setItems(responseData)
+            } else {
+                alert(JSON.stringify(responseData))
+            }
+            setLoading(false)
+        })()
+    }, [])
+
+    if (loading) {
+        return 'Chargement ...'
+    }
+
+    return <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            {items.map(item => <tr key={item.id}>
+                <td>{item.name}</td>
+                <td>{item.email}</td>
+                <td>{item.body}</td>
+            </tr>)}
+        </tbody>
+    </table>
+}
+
 function TodoList () {
     const [todos, setTodos] = useState([])
     const [loading, setLoading] = useState(true)
@@ -77,6 +116,7 @@ function App () {
         <br />
         {counterVisible && <Counter />}
         <TodoList />
+        <PostTable />
     </div>
 }
 
