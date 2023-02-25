@@ -54,8 +54,8 @@ class ThemedButtonClass extends React.Component {
 ThemedButtonClass.contextType = ThemeContext
 
 function ThemeSwitcher () {
-    const {toggleTheme} = useContext(ThemeContext)
-    return <button onClick={toggleTheme}>Set theme</button>
+    const {toggleTheme, theme} = useContext(ThemeContext)
+    return <button style={theme} onClick={toggleTheme}>Set theme</button>
 }
 
 // Provider to pass the value
