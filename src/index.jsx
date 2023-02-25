@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useMemo, useCallback, useContext } from 'react'
 
 const THEMES = {
     dark: {
@@ -14,7 +14,10 @@ const THEMES = {
     }
 }
 
-const ThemeContext = React.createContext(THEMES.dark)
+const ThemeContext = React.createContext({
+    theme: THEMES.dark,
+    toggleTheme: () => {}
+})
 
 function SearchForm() {
     return <div>
@@ -31,24 +34,29 @@ function Toolbar() {
 }
 
 function ThemedButton ({children}) {
-    const value = useContext(ThemeContext)
-    return <button style={value}>{children}</button>
+    const {theme} = useContext(ThemeContext)
+    return <button style={theme}>{children}</button>
 }
 
 // use the hook useContext to replace the Consumer
 function ThemedInput () {
-    const value = useContext(ThemeContext)
-    return <input style={value} type="text"/>
+    const {theme} = useContext(ThemeContext)
+    return <input style={theme} type="text"/>
 }
 
 class ThemedButtonClass extends React.Component {
     render () {
         const {children} = this.props
-        const value = this.context
-        return <button style={value}>{children}</button>
+        const {theme} = this.context
+        return <button style={theme}>{children}</button>
     }
 }
 ThemedButtonClass.contextType = ThemeContext
+
+function ThemeSwitcher () {
+    const {toggleTheme} = useContext(ThemeContext)
+    return <button onClick={toggleTheme}>Set theme</button>
+}
 
 // Provider to pass the value
 function App () {
@@ -57,11 +65,19 @@ function App () {
         setTheme(t => t === 'light' ? 'dark' : 'light')
     })
     const currentTheme = theme === 'light' ? THEMES.light : THEMES.dark
+
+    const value = useMemo(function () {
+        return {
+            theme: theme === 'light' ? THEMES.light : THEMES.dark,
+            toggleTheme
+        }
+    }, [toggleTheme, theme])
+
     return <div>
-        <ThemeContext.Provider value={currentTheme}>
+        <ThemeContext.Provider value={value}>
             <Toolbar />
+            <ThemeSwitcher />
         </ThemeContext.Provider>
-        <button onClick={toggleTheme}>Set theme</button>
     </div>
 }
 
