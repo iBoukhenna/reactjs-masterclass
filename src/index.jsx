@@ -44,13 +44,11 @@ function ThemedInput () {
 class ThemedButtonClass extends React.Component {
     render () {
         const {children} = this.props
-        return <ThemeContext.Consumer>
-            {value => {
-                return <button style={value}>{children}</button>
-            }}
-        </ThemeContext.Consumer>
+        const value = this.context
+        return <button style={value}>{children}</button>
     }
 }
+ThemedButtonClass.contextType = ThemeContext
 
 // Provider to pass the value
 function App () {
