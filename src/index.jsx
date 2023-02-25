@@ -1,83 +1,63 @@
 import { createRoot } from 'react-dom/client'
 import React, { useState, useMemo, useCallback, useContext } from 'react'
 
-const THEMES = {
-    dark: {
-        background: '#000',
-        color: '#FFF',
-        border: 'solid 1px #FFF'
-    },
-    light: {
-        background: '#FFF',
-        color: '#000',
-        border: 'solid 1px #000'
-    }
-}
+const FormContextContext = React.createContext({});
 
-const ThemeContext = React.createContext({
-    theme: THEMES.dark,
-    toggleTheme: () => {}
-})
+function FormContext ({defaultValue, onSubmit, children}) {
+    const [data, setData] = useState(defaultValue)
 
-function SearchForm() {
-    return <div>
-        <ThemedInput />
-        <ThemedButtonClass>Search</ThemedButtonClass>
-    </div>
-}
-
-function Toolbar() {
-    return <div>
-        <SearchForm />
-        <ThemedButton>Button</ThemedButton>
-    </div>
-}
-
-function ThemedButton ({children}) {
-    const {theme} = useContext(ThemeContext)
-    return <button style={theme}>{children}</button>
-}
-
-// use the hook useContext to replace the Consumer
-function ThemedInput () {
-    const {theme} = useContext(ThemeContext)
-    return <input style={theme} type="text"/>
-}
-
-class ThemedButtonClass extends React.Component {
-    render () {
-        const {children} = this.props
-        const {theme} = this.context
-        return <button style={theme}>{children}</button>
-    }
-}
-ThemedButtonClass.contextType = ThemeContext
-
-function ThemeSwitcher () {
-    const {toggleTheme, theme} = useContext(ThemeContext)
-    return <button style={theme} onClick={toggleTheme}>Set theme</button>
-}
-
-// Provider to pass the value
-function App () {
-    const [theme, setTheme] = useState('light')
-    const toggleTheme = useCallback(function () {
-        setTheme(t => t === 'light' ? 'dark' : 'light')
+    const change = useCallback(function (name, value) {
+        //setData(d => Object.assign({}, d, {[name]: value}))
+        setData(d => ({...d, [name]: value}))
     })
-    const currentTheme = theme === 'light' ? THEMES.light : THEMES.dark
 
     const value = useMemo(function () {
-        return {
-            theme: theme === 'light' ? THEMES.light : THEMES.dark,
-            toggleTheme
-        }
-    }, [toggleTheme, theme])
+        //return Object.assign({}, data, {change: change})
+        return {...data, change}
+    }, [data, change])
 
-    return <div>
-        <ThemeContext.Provider value={value}>
-            <Toolbar />
-            <ThemeSwitcher />
-        </ThemeContext.Provider>
+    const handleSubmit = useCallback(function (e) {
+        e.preventDefault()
+        onSubmit(value)
+    }, [onSubmit, value])
+
+    return <FormContextContext.Provider value={value}>
+        <form onSubmit={handleSubmit}>
+            {children}
+        </form>
+        {JSON.stringify(value)}
+    </FormContextContext.Provider>
+}
+
+function FormField ({name, children}) {
+    const data = useContext(FormContextContext)
+
+    const handleChange = useCallback(function(e) {
+        data.change(e.target.name, e.target.value)
+    }, [data.change])
+
+    return <div className="form-group">
+        <label htmlFor={name}>{children}</label>
+        <input value={data[name] || ''} onChange={handleChange} id={name} name={name} type="text" className="form-control" />
+    </div>
+}
+
+function PrimaryButton ({children}) {
+    const data = useContext(FormContextContext)
+    return <button className="btn btn-primary">{children}</button>
+}
+
+function App () {
+    const handleSubmit = useCallback(function (value) {
+        console.log(value)
+    }, [])
+
+    return <div className="container">
+        <FormContext defaultValue={{name: 'Ahmed', firstname: 'Amine'}} onSubmit={handleSubmit}>
+            <FormField name="name">Name</FormField>
+            <FormField name="firstname">First Name</FormField>
+            <PrimaryButton>Envoyer</PrimaryButton>
+        </FormContext>
     </div>
 }
 
