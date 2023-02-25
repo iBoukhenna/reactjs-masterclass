@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
-import React, { useContext } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 
-const theme = {
+const THEMES = {
     dark: {
         background: '#000',
         color: '#FFF',
@@ -14,7 +14,7 @@ const theme = {
     }
 }
 
-const ThemeContext = React.createContext(theme.dark)
+const ThemeContext = React.createContext(THEMES.dark)
 
 function SearchForm() {
     return <div>
@@ -52,10 +52,16 @@ ThemedButtonClass.contextType = ThemeContext
 
 // Provider to pass the value
 function App () {
+    const [theme, setTheme] = useState('light')
+    const toggleTheme = useCallback(function () {
+        setTheme(t => t === 'light' ? 'dark' : 'light')
+    })
+    const currentTheme = theme === 'light' ? THEMES.light : THEMES.dark
     return <div>
-        <ThemeContext.Provider value={theme.dark}>
+        <ThemeContext.Provider value={currentTheme}>
             <Toolbar />
         </ThemeContext.Provider>
+        <button onClick={toggleTheme}>Set theme</button>
     </div>
 }
 
