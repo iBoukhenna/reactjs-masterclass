@@ -19,7 +19,7 @@ const ThemeContext = React.createContext(theme.dark)
 function SearchForm() {
     return <div>
         <ThemedInput />
-        <ThemedButton>Search</ThemedButton>
+        <ThemedButtonClass>Search</ThemedButtonClass>
     </div>
 }
 
@@ -41,10 +41,21 @@ function ThemedInput () {
     return <input style={value} type="text"/>
 }
 
+class ThemedButtonClass extends React.Component {
+    render () {
+        const {children} = this.props
+        return <ThemeContext.Consumer>
+            {value => {
+                return <button style={value}>{children}</button>
+            }}
+        </ThemeContext.Consumer>
+    }
+}
+
 // Provider to pass the value
 function App () {
     return <div>
-        <ThemeContext.Provider value={theme.light}>
+        <ThemeContext.Provider value={theme.dark}>
             <Toolbar />
         </ThemeContext.Provider>
     </div>
