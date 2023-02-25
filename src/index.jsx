@@ -4,33 +4,56 @@ import React from 'react'
 const theme = {
     dark: {
         background: '#000',
-        color: '#FFF'
+        color: '#FFF',
+        border: 'solid 1px #FFF'
     },
     light: {
         background: '#FFF',
-        color: '#000'
+        color: '#000',
+        border: 'solid 1px #000'
     }
 }
 
-// forward theme
-function SearchForm({theme}) {
+const ThemeContext = React.createContext(theme.dark)
+
+function SearchForm() {
     return <div>
-        <input type="text" style={theme}/>
-        <button style={theme}>Search</button>
+        <ThemedInput />
+        <ThemedButton>Search</ThemedButton>
     </div>
 }
 
-// forward theme
-function Toolbar({theme}) {
+function Toolbar() {
     return <div>
-        <SearchForm theme={theme} />
-        <button style={theme}>Button</button>
+        <SearchForm />
+        <ThemedButton>Button</ThemedButton>
     </div>
 }
 
-// define theme
+function ThemedButton ({children}) {
+    return <ThemeContext.Consumer>
+        {value => {
+            return <button style={value}>{children}</button>
+        }}
+    </ThemeContext.Consumer>
+}
+
+// Consumer to use the value
+function ThemedInput () {
+    return <ThemeContext.Consumer>
+        {value => {
+            return <input style={value} type="text"/>
+        }}
+    </ThemeContext.Consumer>
+}
+
+// Provider to pass the value
 function App () {
-    return <div><Toolbar theme={theme.dark} /></div>
+    return <div>
+        <ThemeContext.Provider value={theme.light}>
+            <Toolbar />
+        </ThemeContext.Provider>
+    </div>
 }
 
 const rootElement = document.getElementById("app");
