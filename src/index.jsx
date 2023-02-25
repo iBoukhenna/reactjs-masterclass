@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import React from 'react'
+import React, { useContext } from 'react'
 
 const theme = {
     dark: {
@@ -31,20 +31,14 @@ function Toolbar() {
 }
 
 function ThemedButton ({children}) {
-    return <ThemeContext.Consumer>
-        {value => {
-            return <button style={value}>{children}</button>
-        }}
-    </ThemeContext.Consumer>
+    const value = useContext(ThemeContext)
+    return <button style={value}>{children}</button>
 }
 
-// Consumer to use the value
+// use the hook useContext to replace the Consumer
 function ThemedInput () {
-    return <ThemeContext.Consumer>
-        {value => {
-            return <input style={value} type="text"/>
-        }}
-    </ThemeContext.Consumer>
+    const value = useContext(ThemeContext)
+    return <input style={value} type="text"/>
 }
 
 // Provider to pass the value
