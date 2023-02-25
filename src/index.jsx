@@ -1,42 +1,36 @@
 import { createRoot } from 'react-dom/client'
-import React, { useReducer } from 'react'
+import React from 'react'
 
-function init (initValue) {
-    return {count: initValue}
-}
-
-function reducer (state, action) {
-    switch (action.type) {
-        case 'increase':
-            return {count: state.count + (action.payload || 1)};
-        case 'decrease':
-            if (state.count <= 0) {
-                return state;
-            }
-            return {count: state.count - 1};
-        case 'reset':
-            return init(0);
-        default:
-            throw new Error("L'action " + action.type + " est inconnue")
+const theme = {
+    dark: {
+        background: '#000',
+        color: '#FFF'
+    },
+    light: {
+        background: '#FFF',
+        color: '#000'
     }
 }
 
-function App () {
-    const [count, dispatch] = useReducer(reducer, 0, init)
-
+// forward theme
+function SearchForm({theme}) {
     return <div>
-        Counter : {JSON.stringify(count)}
-        <button onClick={() => dispatch({type: 'increase'})}>Increase</button>
-        <button onClick={() => dispatch({type: 'increase', payload: 10})}>Increase 10</button>
-        <button onClick={() => dispatch({type: 'decrease'})}>Decrease</button>
-        <button onClick={() => dispatch({type: 'reset'})}>Reset</button>
-        <Child />
+        <input type="text" style={theme}/>
+        <button style={theme}>Search</button>
     </div>
 }
 
-function Child () {
-    console.log('render')
-    return <div>Hello</div>
+// forward theme
+function Toolbar({theme}) {
+    return <div>
+        <SearchForm theme={theme} />
+        <button style={theme}>Button</button>
+    </div>
+}
+
+// define theme
+function App () {
+    return <div><Toolbar theme={theme.dark} /></div>
 }
 
 const rootElement = document.getElementById("app");
