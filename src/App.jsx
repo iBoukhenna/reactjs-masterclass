@@ -50,7 +50,11 @@ function Modal({onClose, children}) {
 
 Modal.propTypes = {
     onClose: PropTypes.func.isRequired,
-    children: PropTypes.element.isRequired
+    children: PropTypes.node.isRequired
+}
+
+Modal.defaultProps = {
+    children: 'Hello'
 }
 
 class ErrorBoundary extends React.Component {
@@ -122,7 +126,7 @@ function App() {
                 </button>
             </div>
             <ErrorBoundary>
-            {modal && <Modal onClose={hideModal}><p>Hello</p></Modal>}
+            {modal && <Modal onClose={hideModal} />}
             </ErrorBoundary>
         </div>
     );
