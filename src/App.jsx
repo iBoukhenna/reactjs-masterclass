@@ -1,7 +1,8 @@
 import React, {useState} from "react";
+import { createPortal } from "react-dom";
 
 function Modal({onClose}) {
-    return (
+    return createPortal(
         <>
             <div 
               className="modal fade show"
@@ -40,7 +41,7 @@ function Modal({onClose}) {
                 </div>
             </div>
             <div className="modal-backdrop fade show"></div>
-        </>
+        </>, document.body
     );
 }
 
