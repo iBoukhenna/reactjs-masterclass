@@ -60,8 +60,12 @@ function App() {
         transform: "translateY(1px)",
     }
 
+    const log = function () {
+        console.log("click");
+    }
+
     return (
-        <div className="card" style={style}>
+        <div className="card" style={style} onClick={log}>
             <div className="card-body">
                 <h5 className="card-title">Card title</h5>
                 <p className="card-text">
