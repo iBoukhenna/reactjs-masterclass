@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 // yarn add prop-types
 import PropTypes from 'prop-types';
 
+// Flow and TypeScript
 // default value : after the validation
 function Modal({onClose, children = 'Hello'}) {
     return createPortal(
