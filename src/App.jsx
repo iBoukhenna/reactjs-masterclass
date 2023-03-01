@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 // yarn add prop-types
 import PropTypes from 'prop-types';
 
-
-function Modal({onClose, children}) {
+// default value : after the validation
+function Modal({onClose, children = 'Hello'}) {
     return createPortal(
         <>
             <div 
@@ -53,6 +53,7 @@ Modal.propTypes = {
     children: PropTypes.node.isRequired
 }
 
+// default value : before the validation 
 Modal.defaultProps = {
     children: 'Hello'
 }
