@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { createPortal } from "react-dom";
 
 function Modal({onClose}) {
+    throw new Error();
     return createPortal(
         <>
             <div 
@@ -45,6 +46,32 @@ function Modal({onClose}) {
     );
 }
 
+class ErrorBoundary extends React.Component {
+
+    constructor (props) {
+        super(props)
+        this.state = {error: false}
+    }
+
+    static getDerivedStateFromError(error) {
+        return {error: true}
+    }
+
+    // to catch the error
+    componentDidCatch (error, errorInfo) {
+        console.log(error, errorInfo)
+    }
+
+    render () {
+        if (this.state.error) {
+            return <div className="alert alert-danger">
+                There is problem
+            </div>
+        }
+        return this.props.children
+    }
+}
+
 function App() {
     const [modal, setModal] = useState(false);
 
@@ -62,6 +89,7 @@ function App() {
 
     const log = function () {
         console.log("click");
+        throw new Error();
     }
 
     return (
@@ -75,7 +103,9 @@ function App() {
                     Go somewhere
                 </button>
             </div>
+            <ErrorBoundary>
             {modal && <Modal onClose={hideModal} />}
+            </ErrorBoundary>
         </div>
     );
 }
