@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import { createPortal } from "react-dom";
+// yarn add prop-types
+import PropTypes from 'prop-types';
+
 
 function Modal({onClose}) {
-    throw new Error();
     return createPortal(
         <>
             <div 
@@ -46,6 +48,10 @@ function Modal({onClose}) {
     );
 }
 
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired
+}
+
 class ErrorBoundary extends React.Component {
 
     constructor (props) {
@@ -53,6 +59,7 @@ class ErrorBoundary extends React.Component {
         this.state = {error: false}
     }
 
+    // to show msg
     static getDerivedStateFromError(error) {
         return {error: true}
     }
@@ -72,6 +79,14 @@ class ErrorBoundary extends React.Component {
     }
 }
 
+function Double ({n}) {
+    return `The double of ${n} is ${n + n}`
+}
+
+Double.propTypes = {
+    n: PropTypes.number.isRequired
+}
+
 function App() {
     const [modal, setModal] = useState(false);
 
@@ -89,7 +104,6 @@ function App() {
 
     const log = function () {
         console.log("click");
-        throw new Error();
     }
 
     return (
@@ -98,6 +112,9 @@ function App() {
                 <h5 className="card-title">Card title</h5>
                 <p className="card-text">
                     Some quick example text to build on the card title and make up the bulk of the card's content.
+                </p>
+                <p>
+                    <Double n={1} />
                 </p>
                 <button onClick={showModal} className="btn btn-primary">
                     Go somewhere
