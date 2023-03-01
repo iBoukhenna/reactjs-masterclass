@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import PropTypes from 'prop-types';
 
 
-function Modal({onClose}) {
+function Modal({onClose, children}) {
     return createPortal(
         <>
             <div 
@@ -28,7 +28,7 @@ function Modal({onClose}) {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <p>Modal body text goes here.</p>
+                            {children}
                         </div>
                         <div className="modal-footer">
                             <button
@@ -49,7 +49,8 @@ function Modal({onClose}) {
 }
 
 Modal.propTypes = {
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired
 }
 
 class ErrorBoundary extends React.Component {
@@ -121,7 +122,7 @@ function App() {
                 </button>
             </div>
             <ErrorBoundary>
-            {modal && <Modal onClose={hideModal} />}
+            {modal && <Modal onClose={hideModal}><p>Hello</p></Modal>}
             </ErrorBoundary>
         </div>
     );
