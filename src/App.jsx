@@ -50,7 +50,7 @@ function Modal({onClose, children}) {
 
 Modal.propTypes = {
     onClose: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.element.isRequired
 }
 
 class ErrorBoundary extends React.Component {
