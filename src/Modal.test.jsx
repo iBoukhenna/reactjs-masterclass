@@ -20,3 +20,17 @@ test('close on x click', function () {
     fireEvent.click(close)
     expect(mockClose.mock.calls.length).toBe(1)
 })
+
+test('close on escape key', function () {
+    const mockClose = jest.fn()
+    render(<Modal title="Hello Every One !" onClose={mockClose}>Hello</Modal>)
+    fireEvent.keyDown(document, {key: 'Escape'})
+    expect(mockClose.mock.calls.length).toBe(1)
+})
+
+test('does nothing on keydown not being escape', function () {
+    const mockClose = jest.fn()
+    render(<Modal title="Hello Every One !" onClose={mockClose}>Hello</Modal>)
+    fireEvent.keyDown(document, {key: 'Enter'})
+    expect(mockClose.mock.calls.length).toBe(0)
+})

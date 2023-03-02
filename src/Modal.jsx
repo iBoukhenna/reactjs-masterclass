@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from 'prop-types';
 
 export function Modal({onClose, children, title}) {
+
+    const handleKeyDown = useCallback(function (e) {
+        if (e.key === 'Escape') {
+            onClose()
+        }
+    }, [onClose])
+
+    useEffect(function () {
+        document.addEventListener('keydown', handleKeyDown)
+        return function () {
+            document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [handleKeyDown])
+
     return createPortal(<>
         <div 
             className="modal fade show" role="dialog" style={{ display: "block" }}>
