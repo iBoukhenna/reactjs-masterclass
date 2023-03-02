@@ -5,7 +5,7 @@ export function useToggle(initial) {
     return [
         state,
         function () {
-            setState(true)
+            setState(state => !state)
         }
     ]
 }
