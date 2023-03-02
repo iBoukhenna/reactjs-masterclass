@@ -5,7 +5,6 @@ import React from 'react';
 import { Modal } from './Modal';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import '@testing-library/jest-dom/extend-expect';
 
 
 test('test Modal', function () {
